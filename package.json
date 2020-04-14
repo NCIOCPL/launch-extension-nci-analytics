@@ -1,0 +1,19 @@
+{
+  "name": "launch-extension-nci-analytics",
+  "version": "0.1.0",
+  "description": "NCI Plugins for Adobe Analytics",
+  "main": "index.js",
+  "scripts": {
+    "package": "reactor-packager",
+    "sandbox": "reactor-sandbox",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@adobe/reactor-packager": "^3.0.5",
+    "@adobe/reactor-sandbox": "^10.8.1",
+    "@adobe/reactor-turbine": "^25.8.0"
+  }
+}

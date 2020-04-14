@@ -1,0 +1,12 @@
+{
+  "displayName": "NCI Plugins for Adobe Analytics",
+  "name": "nci-plugins-for-adobe-analytics",
+  "platform": "web",
+  "version": "0.1.0",
+  "description": "NCI Plugins for Adobe Analytics",
+  "author": {
+    "name": "NCI OCPL"
+  },
+  "main": "src/lib/main.js",
+  "viewBasePath": "src/view/"
+}

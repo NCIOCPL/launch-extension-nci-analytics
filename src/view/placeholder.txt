@@ -1,0 +1,1 @@
+The folder needs to exist, so this placeholder will make sure the folder gets to git.
