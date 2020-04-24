@@ -10,7 +10,10 @@ var window = require('@adobe/reactor-window');
 module.exports = function() {
   var queryParams = queryString.parse(window.location.search);
 
-  var campaign = queryParams['cid'] || queryParams['gclid'];
+  // Use Adobe Campaign Tracking First
+  var campaign = queryParams['cid'];
+
+  // Fallback to looking for Google Campaign tracking
   if (!campaign) {
     var utmKeys = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'];
     campaign = utmKeys
@@ -20,6 +23,11 @@ module.exports = function() {
                     .join("|");
     // If no query params exist, unset campaign
     campaign = (campaign !== '_|_|_|_|_') ? campaign : undefined;
+  }
+
+  // Finally fallback to google click link tracking
+  if (!campaign) {
+    campaign = queryParams['gclid'];
   }
 
   return campaign;
