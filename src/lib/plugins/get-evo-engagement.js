@@ -17,40 +17,39 @@ var window = require('@adobe/reactor-window');
  * @param payload.action {string} - the callback function
  */
 function attachEvents(payload) {
-  var element = payload.element,
-      event = payload.event,
-      action = payload.action;
+  var element = payload.element;
+  var event = payload.event;
+  var action = payload.action;
 
-  if (element['addEventListener']) {
-      element['addEventListener'](event, action);
-  } else if (element['attachEvent']) {
-      element['attachEvent']('on' + event, action);
+  if (element.addEventListener) {
+    element.addEventListener(event, action);
+  } else if (element.attachEvent) {
+    element.attachEvent('on' + event, action);
   }
 }
 
 // Constant to define the name of the engagement object on
 // the window.
-var engagementObjectName = "NCIEngagement";
+var engagementObjectName = 'NCIEngagement';
 
 // Move this to a plugin setting, for now allow us to set a
 // cookie to enable it.
-var verboseDebugging = cookie.get("nci_evo_verbose") === "true";
+var verboseDebugging = cookie.get('nci_evo_verbose') === 'true';
 
 /**
- * 
- * @param {*} message 
+ * Log a message
+ * @param {string} message - The message.
  */
 function logVerbose(message) {
   var date = new Date();
-  var time = [ date.getHours(), date.getMinutes(), date.getSeconds() ].join(":");
-  verboseDebugging && turbine.logger.info("[" + engagementObjectName + "] (" + time + ") " + message);
+  var time = [ date.getHours(), date.getMinutes(), date.getSeconds() ].join(':');
+  verboseDebugging && turbine.logger.info('[' + engagementObjectName + '] (' + time + ') ' + message);
 }
 
 /**
  * Initializes the EvoEngagement object
  */
 function initializeEvoEngagement() {
-
   var engagementObject = {
     pollingInterval: 1e4,
     scorePerInterval: 10,
@@ -60,30 +59,30 @@ function initializeEvoEngagement() {
     defaultEngagementScore: 0,
     engagementScore: 0,
     minimumEngagementScore: 1,
-    cookieName: "engagementTracking",
+    cookieName: 'engagementTracking',
     initialize: function () {
-      turbine.logger.info(engagementObjectName + " initialize");
+      turbine.logger.info(engagementObjectName + ' initialize');
       this.startTime = new Date().getTime();
       this.isFocused = document.hasFocus();
     },
     doScroll: function () {
       this.isFocused = document.hasFocus();
       if (this.isFocused) {
-        logVerbose("doScroll");
+        logVerbose('doScroll');
         this.hasScrolled = true;
       }
     },
     doMouse: function () {
       this.isFocused = document.hasFocus();
       if (this.isFocused) {
-        logVerbose("doMouse");
+        logVerbose('doMouse');
         this.hasMoused = true;
       }
     },
     doClick: function () {
       this.isFocused = document.hasFocus();
       if (this.isFocused) {
-        logVerbose("doClick");
+        logVerbose('doClick');
         this.hasClicked = true;
       }
     },
@@ -92,82 +91,83 @@ function initializeEvoEngagement() {
       this[eng.action] = false;
       return newScore;
     },
-    getEngagementStatus: function (e) {
+    getEngagementStatus: function () {
       this.engagementScore = this.getEngagementScore({
-        action: "hasScrolled",
+        action: 'hasScrolled',
         status: this.hasScrolled,
-        score: this.engagementScore,
+        score: this.engagementScore
       });
       this.engagementScore = this.getEngagementScore({
-        action: "hasMoused",
+        action: 'hasMoused',
         status: this.hasMoused,
-        score: this.engagementScore,
+        score: this.engagementScore
       });
       this.engagementScore = this.getEngagementScore({
-        action: "hasClicked",
+        action: 'hasClicked',
         status: this.hasClicked,
-        score: this.engagementScore,
+        score: this.engagementScore
       });
-      this.status = { engagementScore: this.engagementScore }
+      this.status = { engagementScore: this.engagementScore };
       return this.status;
     },
     setEngagementCookie: function (score) {
       cookie.set(this.cookieName, score);
     },
     getAndResetEngagementCookie: function () {
-      logVerbose("Get and Reset Cookie");
-      var val = cookie.get(this.cookieName) || "";
-      this.setEngagementCookie("0");
+      logVerbose('Get and Reset Cookie');
+      var val = cookie.get(this.cookieName) || '';
+      this.setEngagementCookie('0');
       return val;
-    },
+    }
   };
 
   engagementObject.initialize();
 
   // Setup a timer to check for engagement.
-  var engagement_timer = setInterval(
+  // formerly known as engagement_timer before the linter complained.
+  setInterval(
     function () {
       engagementObject.getEngagementStatus();
       var isEngaged = engagementObject.engagementScore >= engagementObject.minimumEngagementScore;
       var accumulatedScore = cookie.get(engagementObject.cookieName) || 0;
 
       if (isEngaged) {
-        var newAccumulatedScore = parseInt(accumulatedScore) + engagementObject.scorePerInterval;
+        var newAccumulatedScore = parseInt(accumulatedScore, 10) + engagementObject.scorePerInterval;
         engagementObject.setEngagementCookie(newAccumulatedScore);
-        logVerbose(" Old Accumulated Score: " + accumulatedScore + " New Accumulated Score: " + newAccumulatedScore);
+        logVerbose(' Old Accumulated Score: ' + accumulatedScore + ' New Accumulated Score: ' + newAccumulatedScore);
         engagementObject.engagementScore = engagementObject.defaultEngagementScore;
       } else {
-        logVerbose(" Old Accumulated Score: " + accumulatedScore + " New Accumulated Score: NO CHANGE");
+        logVerbose(' Old Accumulated Score: ' + accumulatedScore + ' New Accumulated Score: NO CHANGE');
       }
-    }, 
+    },
     engagementObject.pollingInterval
   );
 
   attachEvents({
     element: window,
-    event: "scroll",
+    event: 'scroll',
     action: function () {
       engagementObject.doScroll();
-    },
+    }
   });
 
   attachEvents({
     element: window,
-    event: "mouseover",
+    event: 'mouseover',
     action: function () {
       engagementObject.doMouse();
-    },
+    }
   });
   attachEvents({
     element: window,
-    event: "click",
+    event: 'click',
     action: function () {
       engagementObject.doClick();
-    },
+    }
   });
 
   return engagementObject;
-};
+}
 
 // Function to return an instance of the engagement object.
 module.exports = function () {
@@ -177,5 +177,5 @@ module.exports = function () {
   // avoid any legacy code surprises that were looking for
   // the object directly.
   window[engagementObjectName] = engagementObject;
-  return function() { return engagementObject; }
-}
+  return function() { return engagementObject; };
+};

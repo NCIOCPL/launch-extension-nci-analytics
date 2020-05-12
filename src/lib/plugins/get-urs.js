@@ -11,12 +11,30 @@ var config = {
   // referring url categories
   internalDomains: ['cancer.gov', 'nci.nih.gov', 'smokefree.gov'],
   searchEngines: [
-      'alibaba.com', 'aol.', 'ask.com', 'baidu.com', 'bing.com', 'duckduckgo.com',
-      'google.', 'msn.com', 'search.yahoo.', 'yandex.'
+    'alibaba.com',
+    'aol.',
+    'ask.com',
+    'baidu.com',
+    'bing.com',
+    'duckduckgo.com',
+    'google.',
+    'msn.com',
+    'search.yahoo.',
+    'yandex.'
   ],
   socialNetworks: [
-      'facebook.com', 'flickr.com', 'instagram.com', 'linkedin.com', 'pinterest.com', 'plus.google.com',
-      'reddit.com', 't.co', 'tumblr.com', 'twitter.com', 'yelp.com', 'youtube.com'
+    'facebook.com',
+    'flickr.com',
+    'instagram.com',
+    'linkedin.com',
+    'pinterest.com',
+    'plus.google.com',
+    'reddit.com',
+    't.co',
+    'tumblr.com',
+    'twitter.com',
+    'yelp.com',
+    'youtube.com'
   ],
   govDomains: ['.gov'], // specific gov domains; change to '.gov' to include all gov domains
   eduDomains: ['.edu'], // specific edu domains; change to '.edu' to include all edu domains
@@ -42,48 +60,50 @@ var config = {
 // TODO: Rewrite this using turbine's query string functions
 /**
  * get any value from the query string
- * @param pv_queryParam {string} - accepts multiple comma-delimited param names; will return value of first param found
- * @param pv_url {string=} - if NOT provided, defaults to current page url/address;
+ * @param pvQueryParam {string} - accepts multiple comma-delimited param names; will return value of first param found
+ * @param pvUrl {string=} - if NOT provided, defaults to current page url/address;
  */
- function getQueryString(pv_queryParam, pv_url) {
-    var returnVal = '',
-        fullSubString,
-        splitSubString;
+function getQueryString(pvQueryParam, pvUrl) {
+  var returnVal = '';
+  var fullSubString;
 
-    fullSubString = (pv_url) ? pv_url.slice(pv_url.indexOf("?") + 1) : window.location.search.substring(1);
+  fullSubString = pvUrl
+    ? pvUrl.slice(pvUrl.indexOf('?') + 1)
+    : window.location.search.substring(1);
 
-    var subStringArray = fullSubString.split("&");
-    var queryParamArray = pv_queryParam.split(",");
+  var subStringArray = fullSubString.split('&');
+  var queryParamArray = pvQueryParam.split(',');
 
-    if(subStringArray.length > 0) {
-        for (var i = 0, maxi = subStringArray.length; i < maxi; i++) { // loop through params in query string
-            var paramValue = subStringArray[i].split("=");
-            for (var ii = 0, maxii = queryParamArray.length; ii < maxii; ii++) { //loop through params in pv_queryParam
-                if (paramValue[0].toLowerCase() == queryParamArray[ii].toLowerCase()) {
-                    returnVal = (paramValue[1]) ? unescape(paramValue[1]) : "";
-                    returnVal = returnVal.replace(/\+/g, " "); //replace "+" with " "
-                    returnVal = returnVal.replace(/^\s+|\s+$/g, ""); //trim trailing and leading spaces from string
-                    return returnVal;
-                }
-            }
+  if (subStringArray.length > 0) {
+    for (var i = 0, maxi = subStringArray.length; i < maxi; i++) {
+      // loop through params in query string
+      var paramValue = subStringArray[i].split('=');
+      for (var ii = 0, maxii = queryParamArray.length; ii < maxii; ii++) {
+        // loop through params in pvQueryParam
+        if (paramValue[0].toLowerCase() === queryParamArray[ii].toLowerCase()) {
+          returnVal = paramValue[1] ? unescape(paramValue[1]) : '';
+          returnVal = returnVal.replace(/\+/g, ' '); // replace '+' with ' '
+          returnVal = returnVal.replace(/^\s+|\s+$/g, ''); // trim trailing and leading spaces from string
+          return returnVal;
         }
+      }
     }
-    return(returnVal);
+  }
+  return returnVal;
 }
 
 /**
- * determine if variable is null, undefined or blank ("")
+ * determine if variable is null, undefined or blank ('')
  * @param variable {string}
  * @author Evolytics <nci@evolytics.com>
  * @since 2017-04-28
  * @returns {Boolean}
  */
 function isVarEmpty(variable) {
-  if ((variable === null) || (typeof(variable) === "undefined" || (variable === ""))) {
-      return true;
-  } else {
-      return false;
+  if (variable === null || typeof variable === 'undefined' || variable === '') {
+    return true;
   }
+  return false;
 }
 
 /**
@@ -96,29 +116,37 @@ function isVarEmpty(variable) {
  * @param payload.expire {number} - number of days until cookie expires
  */
 function crossVisitParticipation(payload) {
-  var cookieValue = (payload.cookieValue) ? payload.cookieValue.replace("'", "") : "",
-      cookieArray = (cookie.get(payload.cookieName)) ? cookie.get(payload.cookieName).split(",") : "",
-      expireDate = payload.expire, //new Date(),
-      returnValue;
+  var cookieValue = payload.cookieValue
+    ? payload.cookieValue.replace('\'', '')
+    : '';
+  var cookieArray = cookie.get(payload.cookieName)
+    ? cookie.get(payload.cookieName).split(',')
+    : '';
+  var expireDate = payload.expire;
+  var returnValue;
 
   if (cookieValue) {
-      if ((cookieArray == "none") || (isVarEmpty(cookieArray))) { //does the cookie exist, with data?
-          var newCookieArray = [cookieValue]; //build the new array with payload.cookieValue
-          cookie.set(payload.cookieName, newCookieArray, { expires: expireDate }); //create the new cookie
-          return (cookieValue); //return new string
-      } else {
-          var mostRecent = cookieArray[0];
-          if (mostRecent != cookieValue) { //is the current payload.cookieValue same as last?
-              cookieArray.unshift(cookieValue); //if not, add it
-              if (cookieArray.length >= payload.returnLength) {
-                  cookieArray.length = payload.returnLength
-              }; //make sure array length matches payload.returnLength
-              cookie.set(payload.cookieName, cookieArray, { expires: expireDate }); //update the cookie with new values
-          }
-      }
+    if (cookieArray === 'none' || isVarEmpty(cookieArray)) {
+      // does the cookie exist, with data?
+      var newCookieArray = [cookieValue]; // build the new array with payload.cookieValue
+      cookie.set(payload.cookieName, newCookieArray, { expires: expireDate }); // create the new cookie
+      return cookieValue; // return new string
+    }
+
+    var mostRecent = cookieArray[0];
+    if (mostRecent !== cookieValue) {
+    // is the current payload.cookieValue same as last?
+      cookieArray.unshift(cookieValue); // if not, add it
+      if (cookieArray.length >= payload.returnLength) {
+        cookieArray.length = payload.returnLength;
+      } // make sure array length matches payload.returnLength
+      cookie.set(payload.cookieName, cookieArray, { expires: expireDate }); // update the cookie with new values
+    }
   }
-  returnValue = (cookieArray) ? cookieArray.reverse().join(payload.delimiter) : ''; //build the return string using payload.delimiter
-  return (returnValue);
+  returnValue = cookieArray
+    ? cookieArray.reverse().join(payload.delimiter)
+    : ''; // build the return string using payload.delimiter
+  return returnValue;
 }
 
 /**
@@ -131,21 +159,21 @@ function crossVisitParticipation(payload) {
  * @returns {object}
  */
 function getStacked(payload) {
-  var ursCookie = payload.ursCookie,
-      channel = payload.channel,
-      returnValue = '';
+  var ursCookie = payload.ursCookie;
+  var channel = payload.channel;
+  var returnValue = '';
 
   if (channel) {
-      returnValue = crossVisitParticipation({
-          cookieName: ursCookie,
-          cookieValue: channel,
-          returnLength: config.channelStackDepth,
-          delimiter: config.channelStackDelimiter,
-          expire: config.channelStackExpire
-      });
+    returnValue = crossVisitParticipation({
+      cookieName: ursCookie,
+      cookieValue: channel,
+      returnLength: config.channelStackDepth,
+      delimiter: config.channelStackDelimiter,
+      expire: config.channelStackExpire
+    });
   }
 
-  return (returnValue);
+  return returnValue;
 }
 
 /**
@@ -158,11 +186,10 @@ function getStacked(payload) {
  */
 function getPrefix(campaign, delimiter) {
   var returnValue = '';
-  delimiter = delimiter || '_';
   if (campaign) {
-      returnValue = campaign.split(delimiter)[0];
+    returnValue = campaign.split(delimiter || '_')[0];
   }
-  return (returnValue);
+  return returnValue;
 }
 
 /**
@@ -171,19 +198,18 @@ function getPrefix(campaign, delimiter) {
  * @param searchEngines {array} - array of known search engines
  */
 function getSeoStatus(refDomain, searchEngines, referrer) {
-  var refDomain = refDomain,
-      isSeo = false,
-      isGoogle = (referrer.indexOf('.google.') > -1) ? true : false,
-      isYahoo = (referrer.indexOf('search.yahoo.com') > -1) ? true : false,
-      isYandex = (referrer.indexOf('.yandex.') > -1) ? true : false;
+  var isSeo = false;
+  var isGoogle = referrer.indexOf('.google.') > -1 ? true : false;
+  var isYahoo = referrer.indexOf('search.yahoo.com') > -1 ? true : false;
+  var isYandex = referrer.indexOf('.yandex.') > -1 ? true : false;
 
   if (isGoogle || isYahoo || isYandex) {
-      isSeo = true;
+    isSeo = true;
   } else if (referrer && searchEngines.indexOf(refDomain) > -1) {
-      isSeo = true;
+    isSeo = true;
   }
 
-  return (isSeo);
+  return isSeo;
 }
 
 /**
@@ -196,155 +222,173 @@ function getSeoStatus(refDomain, searchEngines, referrer) {
  * @returns {object}
  * @example getUrs({ campaign: 'ppc_sample_tracking_code', 'https://www.google.com/' });
  */
-var getUrs = function(payload) {
-  var trafficType = '',
-      ursValue = '',
-      ursPrefix = '',
-      ppcKeyword = '',
-      seoKeyword = '',
-      refDomain = '',
-      refSubDomain = '',
-      isInternalDomain = false,
-      campaign = (payload.campaign) ? payload.campaign : '',
-      referrer = (payload.referrer) ? payload.referrer : ((document.referrer) ? document.referrer : '');
-
+var getUrs = function (payload) {
+  var trafficType = '';
+  var ursValue = '';
+  var ursPrefix = '';
+  var ppcKeyword = '';
+  var seoKeyword = '';
+  var refDomain = '';
+  var refSubDomain = '';
+  var campaign = payload.campaign ? payload.campaign : '';
+  var documentReferrer = document.referrer ? document.referrer : '';
+  var referrer = payload.referrer ? payload.referrer : documentReferrer;
 
   // extract referring domain from referrer; exclude subdomain/cname
-  var refInfo = (function(referrer) {
-      var info = {
-          domain: '',
-          subDomain: '',
-          tld: ''
-      };
-      if (referrer) {
-          info.domain = referrer.split('/')[2].split('.'); // get hostname from referring url
-          info.subDomain = info.domain.join('.'); // full domain, including subdomain/cname
-          info.domain = (info.domain.length > 2) ? info.domain.slice(1, info.domain.length) : info.domain;
-          info.tld = info.domain[info.domain.length - 1];
-          info.domain = info.domain.join('.'); // strip subdomain/cname from hostname
-      }
-      return (info);
-  })(referrer);
+  var refInfo = (function () {
+    var info = {
+      domain: '',
+      subDomain: '',
+      tld: ''
+    };
+    if (referrer) {
+      info.domain = referrer.split('/')[2].split('.'); // get hostname from referring url
+      info.subDomain = info.domain.join('.'); // full domain, including subdomain/cname
+      info.domain =
+        info.domain.length > 2
+          ? info.domain.slice(1, info.domain.length)
+          : info.domain;
+      info.tld = info.domain[info.domain.length - 1];
+      info.domain = info.domain.join('.'); // strip subdomain/cname from hostname
+    }
+    return info;
+  })();
 
-  var tld = refInfo.tld,
-      refDomain = refInfo.domain,
-      refSubDomain = refInfo.subDomain;
+  var tld = refInfo.tld;
+  refDomain = refInfo.domain;
+  refSubDomain = refInfo.subDomain;
 
   // determine marketing channel based on business rules and regex patterns set in config
   if (!campaign && !referrer && !refDomain) {
-      trafficType = 'direct-dnt';
-      ursValue = campaign;
+    trafficType = 'direct-dnt';
+    ursValue = campaign;
   } else if (campaign.search(config.pattDisplay) > -1) {
-      trafficType = 'display';
-      ursValue = campaign;
+    trafficType = 'display';
+    ursValue = campaign;
   } else if (campaign.search(config.pattAffiliate) > -1) {
-      trafficType = 'affiliate';
-      ursValue = campaign;
+    trafficType = 'affiliate';
+    ursValue = campaign;
   } else if (campaign.search(config.pattPartner) > -1) {
-      trafficType = 'partner';
-      ursValue = campaign;
+    trafficType = 'partner';
+    ursValue = campaign;
   } else if (campaign.search(config.pattDr) > -1) {
-      trafficType = 'dr';
-      ursValue = campaign;
+    trafficType = 'dr';
+    ursValue = campaign;
   } else if (campaign.search(config.pattEmail) > -1) {
-      trafficType = 'email';
-      ursValue = campaign;
+    trafficType = 'email';
+    ursValue = campaign;
 
-      // account for non-compliant tracking code schema
-      if (/^eblast\|/i.test(campaign)) {
-          config.campaignPrefixDelimiter = '|';
-      }
+    // account for non-compliant tracking code schema
+    if (/^eblast\|/i.test(campaign)) {
+      config.campaignPrefixDelimiter = '|';
+    }
   } else if (campaign.search(config.pattSocial) > -1) {
-      trafficType = 'social';
-      ursValue = campaign;
+    trafficType = 'social';
+    ursValue = campaign;
   } else if (campaign.search(config.pattPaidSocial) > -1) {
-      trafficType = 'paid_social';
-      ursValue = campaign;
+    trafficType = 'paid_social';
+    ursValue = campaign;
   } else if (campaign.search(config.pattSem) > -1) {
-      trafficType = 'paid_search';
-      ursValue = campaign;
+    trafficType = 'paid_search';
+    ursValue = campaign;
 
-      // look for paid search keyword
-      if (referrer) {
-          ppcKeyword = queryString('q,query,search', referrer);
-      }
-      ppcKeyword = (ppcKeyword) ? ppcKeyword : ('not provided|' + ((refDomain) ? refDomain : trafficType));
+    // look for paid search keyword
+    if (referrer) {
+      ppcKeyword = getQueryString('q,query,search', referrer);
+    }
+    ppcKeyword = ppcKeyword
+      ? ppcKeyword
+      : 'not provided|' + (refDomain ? refDomain : trafficType);
 
-      // internal tracking code
+    // internal tracking code
   } else if (campaign.search(config.pattInternal) > -1) {
-      trafficType = 'internal';
-      ursValue = campaign;
+    trafficType = 'internal';
+    ursValue = campaign;
 
-      // unknown/unrecognized tracking code prefix
-  } else if (campaign) { // catch campaigns with unexpected or unknown prefix
-      trafficType = 'unknown';
-      ursValue = campaign;
+    // unknown/unrecognized tracking code prefix
+  } else if (campaign) {
+    // catch campaigns with unexpected or unknown prefix
+    trafficType = 'unknown';
+    ursValue = campaign;
 
-      // internal domains (do not track as referrer/channel)
-  } else if (referrer && (config.internalDomains.indexOf(refDomain) > -1 || config.internalDomains.indexOf(refSubDomain) > -1)) {
-      trafficType = 'internal-dnt';
-      ursValue = '';
+    // internal domains (do not track as referrer/channel)
+  } else if (
+    referrer &&
+    (config.internalDomains.indexOf(refDomain) > -1 ||
+      config.internalDomains.indexOf(refSubDomain) > -1)
+  ) {
+    trafficType = 'internal-dnt';
+    ursValue = '';
 
-      // known social -- include before [seo] because of 'plus.google.com'
-  } else if ((referrer && config.socialNetworks.indexOf(refDomain) > -1) || refSubDomain === 'plus.google.com') {
-      trafficType = 'social';
-      ursValue = '[soc]_' + refDomain;
+    // known social -- include before [seo] because of 'plus.google.com'
+  } else if (
+    (referrer && config.socialNetworks.indexOf(refDomain) > -1) ||
+    refSubDomain === 'plus.google.com'
+  ) {
+    trafficType = 'social';
+    ursValue = '[soc]_' + refDomain;
 
-      // known seo
+    // known seo
   } else if (getSeoStatus(refDomain, config.searchEngines, referrer)) {
-      trafficType = 'organic_search';
-      ursValue = '[seo]_' + refDomain;
+    trafficType = 'organic_search';
+    ursValue = '[seo]_' + refDomain;
 
-      // look for seo keyword
-      seoKeyword = getQueryString('q,query,search,text', referrer);
-      seoKeyword = (seoKeyword) ? seoKeyword : ('not provided|' + ((refDomain) ? refDomain : trafficType));
+    // look for seo keyword
+    seoKeyword = getQueryString('q,query,search,text', referrer);
+    seoKeyword = seoKeyword
+      ? seoKeyword
+      : 'not provided|' + (refDomain ? refDomain : trafficType);
 
-      // known government domains
-  } else if (referrer && tld === 'gov' && config.internalDomains.indexOf(refDomain) < 0) {
-      trafficType = 'government_domains';
-      ursValue = '[gov]_' + refDomain;
+    // known government domains
+  } else if (
+    referrer &&
+    tld === 'gov' &&
+    config.internalDomains.indexOf(refDomain) < 0
+  ) {
+    trafficType = 'government_domains';
+    ursValue = '[gov]_' + refDomain;
 
-      // known education domains
+    // known education domains
   } else if (referrer && tld === 'edu') {
-      trafficType = 'education_domains';
-      ursValue = '[edu]_' + refDomain;
+    trafficType = 'education_domains';
+    ursValue = '[edu]_' + refDomain;
 
-      // unknown referring domains
+    // unknown referring domains
   } else if (referrer && config.govDomains.indexOf(refDomain) < 0) {
-      trafficType = 'referring_domains';
-      ursValue = '[ref]_' + refDomain;
+    trafficType = 'referring_domains';
+    ursValue = '[ref]_' + refDomain;
   }
 
   ursPrefix = getPrefix(ursValue, config.campaignPrefixDelimiter);
 
   // if campaign has an unknown prefix (identified above), set trafficType to match ursPrefix
   if (trafficType === 'unknown') {
-      trafficType = ursPrefix;
+    trafficType = ursPrefix;
   }
 
-  if (ursValue != '' && trafficType != 'organic_search') {
-      seoKeyword = 'not organic search';
+  if (ursValue !== '' && trafficType !== 'organic_search') {
+    seoKeyword = 'not organic search';
   }
 
-  if (ursValue != '' && trafficType != 'paid_search') {
-      ppcKeyword = 'not paid search';
+  if (ursValue !== '' && trafficType !== 'paid_search') {
+    ppcKeyword = 'not paid search';
   }
 
   // return urs information for use in analytics calls
-  return ({
-      campaign: campaign,
-      referrer: referrer,
-      refDomain: refDomain,
-      value: ursValue,
-      prefix: ursPrefix,
-      stacked: getStacked({
-          channel: ursPrefix,
-          ursCookie: config.channelStackCookie
-      }),
-      trafficType: trafficType,
-      seoKeyword: seoKeyword,
-      ppcKeyword: ppcKeyword
-  });
-}
+  return {
+    campaign: campaign,
+    referrer: referrer,
+    refDomain: refDomain,
+    value: ursValue,
+    prefix: ursPrefix,
+    stacked: getStacked({
+      channel: ursPrefix,
+      ursCookie: config.channelStackCookie
+    }),
+    trafficType: trafficType,
+    seoKeyword: seoKeyword,
+    ppcKeyword: ppcKeyword
+  };
+};
 
 module.exports = getUrs;

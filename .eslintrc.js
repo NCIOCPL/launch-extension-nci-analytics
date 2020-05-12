@@ -1,127 +1,247 @@
 module.exports = {
-  env: {
-    browser: true,
-    node: true,
-  },
-  rules: {
-    'accessor-pairs': 'error',
-    'array-callback-return': 'error',
-    'block-scoped-var': 'error',
-    'complexity': ['error', 14],
-    'consistent-return': 'error',
-    'default-case': 'error',
-    'dot-notation': 'error',
-    'eqeqeq': 'off',
-    'guard-for-in': 'error',
-    'no-alert': 'error',
-    'no-buffer-constructor': 'error',
-    'no-caller': 'error',
-    'no-case-declarations': 'error',
-    'no-div-regex': 'error',
-    'no-else-return': 'off',
-    'no-empty-function': 'off', // we're all grown ups here...
-    'no-empty-pattern': 'error',
-    'no-eq-null': 'off',
-    'no-eval': 'error',
-    'no-extend-native': 'error',
-    'no-extra-bind': 'error',
-    'no-extra-label': 'error',
-    'no-fallthrough': 'error',
-    'no-floating-decimal': 'error',
-    'no-global-assign': 'error',
-    'no-implicit-coercion': 'off',
-    'no-implicit-globals': 'error',
-    'no-implied-eval': 'error',
-    'no-invalid-this': 'error',
-    'no-iterator': 'error',
-    'no-labels': 'error',
-    'no-lone-blocks': 'error',
-    'no-loop-func': 'error',
-    'no-magic-numbers': 'off', // sometimes this is ok (foo.length - 1 == index of last one)
-    'no-multi-str': 'error',
-    'no-native-reassign': 'error',
-    'no-new-func': 'error',
-    'no-new-wrappers': 'error',
-    'no-new': 'error',
-    'no-octal-escape': 'error',
-    'no-octal': 'error',
-    'no-param-reassign': 'off',
-    'no-proto': 'error',
-    'no-redeclare': 'error',
-    'no-restricted-properties': 'off', // no ideas of what to disallow right now...
-    'no-restricted-syntax': ['error', 'WithStatement'],
-    'no-return-assign': 'error',
-    'no-script-url': 'error',
-    'no-self-assign': 'error',
-    'no-self-compare': 'error',
-    'no-sequences': 'error',
-    'no-throw-literal': 'error',
-    'no-unmodified-loop-condition': 'error',
-    'no-unused-expressions': 'off',
-    'no-unused-labels': 'error',
-    'no-useless-call': 'error',
-    'no-useless-catch': 'error',
-    'no-useless-concat': 'error',
-    'no-useless-escape': 'error',
-    'no-useless-return': 'error',
-    'no-void': 'error',
-    'no-warning-comments': ['error', {terms: ['fixme'], location: 'anywhere'}],
-    'no-with': 'off',
-    'prefer-promise-reject-errors': 'off', // maybe one day... Not sure I'm in...
-    'prefer-named-capture-group': 'off', // maybe one day... But I'm not used to it yet.
-    'radix': 'error',
-    'require-await': 'error', // if you don't need async, don't use async or return Promise.resolve...
-    'vars-on-top': 'error',
-    'yoda': 'error',
-    'require-atomic-updates': 'off',
-    'require-unicode-regexp': 'off',
-    'no-misleading-character-class': 'off',
-    'no-async-promise-executor': 'off',
-    'no-constructor-return': 'error',
-    'no-dupe-else-if': 'error',
-    'no-import-assign': 'error',
-    'no-setter-return': 'error',
-    'prefer-regex-literals': 'off',
-    'grouped-accessor-pairs': 'off',
+	parser: 'babel-eslint',
+	parserOptions: {
+		sourceType: 'module',
+		allowImportExportEverywhere: false,
+		ecmaFeatures: {
+			globalReturn: false,
+		},
+	},
+	plugins: ['es5', 'babel'],
+	env: {
+		browser: true,
+		node: true,
+	},
+	rules: {
+		/**
+		 * ES5 plugin rules
+		 */
+		'es5/no-arrow-functions': 2,
+		'es5/no-binary-and-octal-literals': 2,
+		'es5/no-block-scoping': 2,
+		'es5/no-classes': 2,
+		'es5/no-computed-properties': 2,
+		'es5/no-default-parameters': 2,
+		'es5/no-destructuring': 2,
+		'es5/no-es6-methods': 2,
+		'es5/no-es6-static-methods': 2,
+		'es5/no-for-of': 2,
+		'es5/no-generators': 2,
+		'es5/no-modules': 2,
+		'es5/no-object-super': 2,
+		'es5/no-rest-parameters': 2,
+		'es5/no-shorthand-properties': 2,
+		'es5/no-spread': 2,
+		'es5/no-template-literals': 2,
+		'es5/no-typeof-symbol': 2,
+		'es5/no-unicode-code-point-escape': 2,
+		'es5/no-unicode-regex': 2,
+		
+		/**
+		 * Strict mode
+		 */
+		strict: 0, // http://eslint.org/docs/rules/strict
 
-    // strict
-    'strict': 'error',
+		/**
+		 * Variables
+		 */
+		'no-shadow': 2, // http://eslint.org/docs/rules/no-shadow
+		'no-shadow-restricted-names': 2, // http://eslint.org/docs/rules/no-shadow-restricted-names
+		'no-unused-vars': [
+			2,
+			{
+				// http://eslint.org/docs/rules/no-unused-vars
+				vars: 'local',
+				args: 'after-used',
+			},
+		],
 
-    // variables
-    'default-param-last': 'off',
-    'no-restricted-globals': ['error', 'event', 'fdescribe'],
-    'no-catch-shadow': 'error',
-    'no-delete-var': 'error',
-    'no-label-var': 'error',
-    'no-shadow-restricted-names': 'error',
-    'no-shadow': 'error',
-    'no-undef-init': 'error',
-    'no-undef': 'error',
-    'no-undefined': 'off',
-    'no-unused-vars': [
-      'error',
-      {
-        argsIgnorePattern: '^_',
-        varsIgnorePattern: '^ignored',
-        args: 'after-used',
-        ignoreRestSiblings: true,
-      },
-    ],
+		/**
+		 * Possible errors
+		 */
+		'comma-dangle': [2, 'never'], // http://eslint.org/docs/rules/comma-dangle
+		'no-cond-assign': [2, 'always'], // http://eslint.org/docs/rules/no-cond-assign
+		'no-console': 1, // http://eslint.org/docs/rules/no-console
+		'no-debugger': 1, // http://eslint.org/docs/rules/no-debugger
+		'no-alert': 1, // http://eslint.org/docs/rules/no-alert
+		'no-constant-condition': 1, // http://eslint.org/docs/rules/no-constant-condition
+		'no-dupe-keys': 2, // http://eslint.org/docs/rules/no-dupe-keys
+		'no-duplicate-case': 2, // http://eslint.org/docs/rules/no-duplicate-case
+		'no-empty': 2, // http://eslint.org/docs/rules/no-empty
+		'no-empty-character-class': 2, // http://eslint.org/docs/rules/no-empty-character-class
+		'no-ex-assign': 2, // http://eslint.org/docs/rules/no-ex-assign
+		'no-extra-semi': 2, // http://eslint.org/docs/rules/no-extra-semi
+		'no-func-assign': 2, // http://eslint.org/docs/rules/no-func-assign
+		'no-inner-declarations': 2, // http://eslint.org/docs/rules/no-inner-declarations
+		'no-invalid-regexp': 2, // http://eslint.org/docs/rules/no-invalid-regexp
+		'no-irregular-whitespace': 2, // http://eslint.org/docs/rules/no-irregular-whitespace
+		'no-negated-in-lhs': 2, // http://eslint.org/docs/rules/no-negated-in-lhs
+		'no-new-require': 2, // http://eslint.org/docs/rules/no-new-require
+		'no-obj-calls': 2, // http://eslint.org/docs/rules/no-obj-calls
+		'no-path-concat': 2, // http://eslint.org/docs/rules/no-path-concat
+		'no-regex-spaces': 2, // http://eslint.org/docs/rules/no-regex-spaces
+		'no-sparse-arrays': 2, // http://eslint.org/docs/rules/no-sparse-arrays
+		'no-unreachable': 2, // http://eslint.org/docs/rules/no-unreachable
+		'use-isnan': 2, // http://eslint.org/docs/rules/use-isnan
 
-    // CommonJS
-    'callback-return': 'off', // see known limitations: http://eslint.org/docs/rules/callback-return it's just annoying...
-    'global-require': 'warn', // sometimes this is ok. We shouldn't break a build
-    'handle-callback-err': 'error',
-    'no-mixed-requires': ['error', {grouping: true, allowCall: false}],
-    'no-new-require': 'error',
-    'no-path-concat': 'error',
-    'no-process-env': 'off',
-    'no-process-exit': 'error',
-    'no-restricted-modules': 'off',
-    'no-sync': 'off',
-  },
-  globals: {
-    Simulate: true,
-    _satellite: true,
-  },
+		/**
+		 * Best practices
+		 */
+		'consistent-return': 2, // http://eslint.org/docs/rules/consistent-return
+		curly: [2, 'multi-line'], // http://eslint.org/docs/rules/curly
+		'default-case': 2, // http://eslint.org/docs/rules/default-case
+		'dot-notation': [
+			2,
+			{
+				// http://eslint.org/docs/rules/dot-notation
+				allowKeywords: true,
+			},
+		],
+		eqeqeq: 2, // http://eslint.org/docs/rules/eqeqeq
+		'guard-for-in': 2, // http://eslint.org/docs/rules/guard-for-in
+		'no-caller': 2, // http://eslint.org/docs/rules/no-caller
+		'no-div-regex': 2, // http://eslint.org/docs/rules/no-div-regex
+		'no-else-return': 2, // http://eslint.org/docs/rules/no-else-return
+		'no-labels': 2, // http://eslint.org/docs/rules/no-labels
+		'no-eq-null': 2, // http://eslint.org/docs/rules/no-eq-null
+		'no-eval': 2, // http://eslint.org/docs/rules/no-eval
+		'no-extend-native': 2, // http://eslint.org/docs/rules/no-extend-native
+		'no-extra-bind': 2, // http://eslint.org/docs/rules/no-extra-bind
+		'no-fallthrough': 2, // http://eslint.org/docs/rules/no-fallthrough
+		'no-floating-decimal': 2, // http://eslint.org/docs/rules/no-floating-decimal
+		'no-implied-eval': 2, // http://eslint.org/docs/rules/no-implied-eval
+		'no-lone-blocks': 2, // http://eslint.org/docs/rules/no-lone-blocks
+		'no-loop-func': 2, // http://eslint.org/docs/rules/no-loop-func
+		'no-multi-str': 2, // http://eslint.org/docs/rules/no-multi-str
+		'no-native-reassign': 2, // http://eslint.org/docs/rules/no-native-reassign
+		'no-new': 2, // http://eslint.org/docs/rules/no-new
+		'no-new-func': 2, // http://eslint.org/docs/rules/no-new-func
+		'no-new-wrappers': 2, // http://eslint.org/docs/rules/no-new-wrappers
+		'no-octal': 2, // http://eslint.org/docs/rules/no-octal
+		'no-octal-escape': 2, // http://eslint.org/docs/rules/no-octal-escape
+		'no-param-reassign': 2, // http://eslint.org/docs/rules/no-param-reassign
+		'no-process-exit': 2, // http://eslint.org/docs/rules/no-process-exit
+		'no-proto': 2, // http://eslint.org/docs/rules/no-proto
+		'no-redeclare': 2, // http://eslint.org/docs/rules/no-redeclare
+		'no-return-assign': 2, // http://eslint.org/docs/rules/no-return-assign
+		'no-script-url': 2, // http://eslint.org/docs/rules/no-script-url
+		'no-self-compare': 2, // http://eslint.org/docs/rules/no-self-compare
+		'no-sequences': 2, // http://eslint.org/docs/rules/no-sequences
+		'no-throw-literal': 2, // http://eslint.org/docs/rules/no-throw-literal
+		'no-undef': 2, // http://eslint.org/docs/rules/no-undef
+		'no-undef-init': 2, // http://eslint.org/docs/rules/no-undef-init
+		'no-undefined': 1, // http://eslint.org/docs/rules/no-undefined
+		'no-with': 2, // http://eslint.org/docs/rules/no-with
+		'handle-callback-err': 1, // http://eslint.org/docs/rules/handle-callback-err
+		radix: 2, // http://eslint.org/docs/rules/radix
+		'wrap-iife': [2, 'any'], // http://eslint.org/docs/rules/wrap-iife
+		yoda: 2, // http://eslint.org/docs/rules/yoda
+
+		/**
+		 * Style
+		 */
+		indent: [2, 2], // http://eslint.org/docs/rules/indent
+		'brace-style': [
+			2, // http://eslint.org/docs/rules/brace-style
+			'1tbs',
+			{
+				allowSingleLine: true,
+			},
+		],
+		quotes: [
+			// http://eslint.org/docs/rules/quotes
+			2,
+			'single',
+			'avoid-escape',
+		],
+		camelcase: [
+			2,
+			{
+				// http://eslint.org/docs/rules/camelcase
+				properties: 'never',
+			},
+		],
+		'comma-spacing': [
+			2,
+			{
+				// http://eslint.org/docs/rules/comma-spacing
+				before: false,
+				after: true,
+			},
+		],
+		'comma-style': [2, 'last'], // http://eslint.org/docs/rules/comma-style
+		'eol-last': 2, // http://eslint.org/docs/rules/eol-last
+		'key-spacing': [
+			2,
+			{
+				// http://eslint.org/docs/rules/key-spacing
+				beforeColon: false,
+				afterColon: true,
+			},
+		],
+		'new-cap': [
+			2,
+			{
+				// http://eslint.org/docs/rules/new-cap
+				newIsCap: true,
+			},
+		],
+		'new-parens': 2, // http://eslint.org/docs/rules/new-parens
+		'no-array-constructor': 2, // http://eslint.org/docs/rules/no-array-constructor
+		'no-lonely-if': 1, // http://eslint.org/docs/rules/no-lonely-if
+		'no-mixed-spaces-and-tabs': 1, // http://eslint.org/docs/rules/no-mixed-spaces-and-tabs
+		'no-multiple-empty-lines': [
+			2,
+			{
+				// http://eslint.org/docs/rules/no-multiple-empty-lines
+				max: 2,
+			},
+		],
+		'no-nested-ternary': 2, // http://eslint.org/docs/rules/no-nested-ternary
+		'no-new-object': 2, // http://eslint.org/docs/rules/no-new-object
+		'no-spaced-func': 2, // http://eslint.org/docs/rules/no-spaced-func
+		'no-trailing-spaces': 2, // http://eslint.org/docs/rules/no-trailing-spaces
+		'no-extra-parens': [2, 'functions'], // http://eslint.org/docs/rules/no-extra-params
+		'one-var': [2, 'never'], // http://eslint.org/docs/rules/one-var
+		'padded-blocks': [2, 'never'], // http://eslint.org/docs/rules/padded-blocks
+		semi: [2, 'always'], // http://eslint.org/docs/rules/semi
+		'semi-spacing': [
+			2,
+			{
+				// http://eslint.org/docs/rules/semi-spacing
+				before: false,
+				after: true,
+			},
+		],
+		'keyword-spacing': 2, // http://eslint.org/docs/rules/keyword-spacing
+		'space-before-blocks': 2, // http://eslint.org/docs/rules/space-before-blocks
+		'space-infix-ops': 2, // http://eslint.org/docs/rules/space-infix-ops
+		'space-unary-ops': 2, // http://eslint.org/docs/rules/space-unary-ops
+		'spaced-comment': [
+			2,
+			'always',
+			{
+				// http://eslint.org/docs/rules/spaced-comment
+				exceptions: ['-', '+'],
+				markers: ['=', '!'], // space here to support sprockets directives
+			},
+		],
+
+		// CommonJS
+		'callback-return': 'off', // see known limitations: http://eslint.org/docs/rules/callback-return it's just annoying...
+		'global-require': 'warn', // sometimes this is ok. We shouldn't break a build
+		'handle-callback-err': 'error',
+		'no-mixed-requires': ['error', { grouping: true, allowCall: false }],
+		'no-new-require': 'error',
+		'no-path-concat': 'error',
+		'no-process-env': 'off',
+		'no-process-exit': 'error',
+		'no-restricted-modules': 'off',
+		'no-sync': 'off',
+	},
+	globals: {
+		Simulate: true,
+		_satellite: true,
+		turbine: true,
+	},
 }
